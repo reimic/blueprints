@@ -1,19 +1,20 @@
 {
+  "prefer-stable": true,
   "require": {
-    "symfony/event-dispatcher": "^7.0",
-    "justinrainbow/json-schema": "^5.2",
-    "symfony/filesystem": "^7.0",
-    "psr/simple-cache": "^3.0",
-    "symfony/http-client": "^7.0",
-    "symfony/http-kernel": "^7.0",
-    "pimple/pimple": "^3.0",
-    "opis/json-schema": "^2.3",
-    "nette/php-generator": "^4.1",
-    "json-mapper/json-mapper": "^2.21"
+    "symfony/event-dispatcher": "*",
+    "justinrainbow/json-schema": "*",
+    "symfony/filesystem": "*",
+    "psr/simple-cache": "*",
+    "symfony/http-client": "*",
+    "symfony/http-kernel": "*",
+    "pimple/pimple": "*",
+    "opis/json-schema": "*",
+    "nette/php-generator": "*",
+    "json-mapper/json-mapper": "*"
   },
   "require-dev": {
-    "pestphp/pest": "^2.33",
-    "jane-php/json-schema": "^7.6"
+    "pestphp/pest": "^2.34.0",
+    "jane-php/json-schema": "^7.6.0"
   },
   "config": {
     "optimize-autoloader": true,
@@ -21,6 +22,9 @@
     "allow-plugins": {
       "pestphp/pest-plugin": true,
       "php-http/discovery": true
+    },
+    "platform": {
+      "php": "8.3"
     }
   },
   "autoload": {
