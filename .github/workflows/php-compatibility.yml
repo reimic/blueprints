@@ -73,10 +73,6 @@ jobs:
       # passing a custom cache suffix ensures that the cache is flushed at least once per week.
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
-        with:
-          ignore-cache: "yes"
-          composer-options: "--optimize-autoloader"
-          working-directory: "dev"
 
       - name: Make Composer packages available globally
         run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
