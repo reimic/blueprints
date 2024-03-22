@@ -14,6 +14,14 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "bamarni/composer-bin-plugin": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "platform": {
+      "php": "8.3"
+    },
     "autoload": {
       "classmap": [
         "../src/"
@@ -36,9 +44,6 @@
         "../src/WordPress/Streams/stream_str_replace.php",
         "../src/WordPress/AsyncHttp/async_http_streams.php"
       ]
-    },
-    "platform": {
-      "php": "8.3"
     }
   }
 }
