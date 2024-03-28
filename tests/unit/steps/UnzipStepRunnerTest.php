@@ -2,6 +2,7 @@
 
 namespace unit\steps;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnitTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -35,7 +36,7 @@ class UnzipStepRunnerTest extends PHPUnitTestCase {
 	private $filesystem;
 
 	/**
-	 * @var ResourceManager $resource_manager resource manager mock
+	 * @var ResourceManager&MockObject $resource_manager resource manager mock
 	 */
 	private $resource_manager;
 
@@ -82,11 +83,11 @@ class UnzipStepRunnerTest extends PHPUnitTestCase {
 		$this->resource_manager->method( 'getStream' )
 			->willReturn( fopen( $zip, 'rb' ) );
 
-		$input = new UnzipStep();
-		$input->setZipFile( $zip );
-		$input->setExtractToPath( 'dir' );
+		$step = new UnzipStep();
+		$step->setZipFile( $zip );
+		$step->setExtractToPath( 'dir' );
 
-		$this->step_runner->run( $input, new Tracker() );
+		$this->step_runner->run( $step, new Tracker() );
 
 		$extracted_file_path = $this->runtime->resolvePath( 'dir/test_zip.txt' );
 		self::assertFileEquals( __DIR__ . '/resources/test_zip.txt', $extracted_file_path );

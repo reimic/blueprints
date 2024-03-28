@@ -12,7 +12,7 @@ class UnzipStepRunner extends BaseStepRunner {
 	 * Runs the Unzip Step
 	 *
 	 * @param UnzipStep $input Step.
-	 * @param Tracker   $progress_tracker Tracker.
+	 * @param Tracker $progress_tracker Tracker.
 	 * @return void
 	 */
 	public function run(
