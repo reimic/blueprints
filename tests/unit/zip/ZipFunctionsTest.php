@@ -54,11 +54,11 @@ class ZipFunctionsTest extends PHPUnitTestCase {
 		$zip = new ZipArchive();
 		$zip->open( $filename, ZipArchive::CREATE );
 		$symlink = symlink( self::TMP_DIRECTORY, 'evillink.txt' );
-		$zip->addFromString( $symlink,"zip-symlink-test" );
+		$zip->addFile( $symlink,"zip-symlink-test" );
 		$zip->close();
 
 		self::expectException( ZipException::class );
-		self::expectExceptionMessage( "Relative paths in zips are not allowed." );
+		self::expectExceptionMessage( "Semantic links in zips are not allowed." );
 		zip_extract_to( fopen( $filename, 'rb' ), dirname( $filename ) );
 	}
 }

@@ -16,12 +16,12 @@ function zip_extract_to( $fp, $to_path ) {
 
 		// prevent zip slip -> using relative path to access otherwise inaccessible files
 		if ( false !== strpos( $entry->path ,'..') ) {
-			throw new ZipException("Relative paths in zips are not allowed.");
+			throw new ZipException( "Relative paths in zips are not allowed." );
 		}
 
 		// prevent zip with symlinks -> using a symbolic link to access otherwise inaccessible files
 		if ( is_link( $entry->path ) ) {
-			throw new ZipException("Semantic links in zips are not allowed.");
+			throw new ZipException( "Semantic links in zips are not allowed." );
 		}
 
 		$path   = Path::canonicalize( $to_path . '/' . $entry->path );
