@@ -187,12 +187,12 @@ class Client {
 			return;
 		}
 
-		$enqueued                           = array_slice( $this->get_enqueued_request(), 0, $backfill );
-		list( $streams, $response_headers ) = streams_send_http_requests( $enqueued );
+		$enqueued                          = array_slice( $this->get_enqueued_request(), 0, $backfill );
+		list( $streams, $codes, $headers ) = streams_send_http_requests( $enqueued );
 
 		foreach ( $streams as $k => $stream ) {
 			$request                            = $enqueued[ $k ];
-			$total                              = $response_headers[ $k ]['headers']['content-length'];
+			$total                              = $headers[ $k ]['content-length'];
 			$this->requests[ $request ]->state  = RequestInfo::STATE_STREAMING;
 			$this->requests[ $request ]->stream = stream_monitor_progress(
 				$stream,

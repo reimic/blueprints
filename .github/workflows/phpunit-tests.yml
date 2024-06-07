@@ -1,10 +1,21 @@
 name: PHPUnit Tests
 
 on:
+  workflow_dispatch:
+    inputs:
+      TEST_SUITE:
+        description: 'pick PHPUnit test suite'
+        type: choice
+        options:
+          - default
+          - unit
+          - e2e
+        required: false
+        default: 'default'
   push:
+  pull_request:
     branches:
       - trunk
-  pull_request:
 
 jobs:
   test:
@@ -22,4 +33,8 @@ jobs:
     with:
       os: ${{ matrix.os }}
       php: ${{ matrix.php }}
-      phpunit-config: ${{ 'phpunit.xml.dist' }}
+      phpunit-config: 'phpunit.xml.dist'
+      # for a manual workflow dispatch -> will use the TEST_SUITE value
+      # for all pushes to any branch   -> will only run unit tests
+      # for pull requests to the trunk -> will run unit and e2e tests
+      phpunit-testsuite: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.TEST_SUITE != '') && github.event.inputs.TEST_SUITE || (github.event_name == 'push' && 'unit') || 'default' }}

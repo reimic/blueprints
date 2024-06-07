@@ -2,6 +2,7 @@
 
 namespace WordPress\Blueprints\Runner\Step;
 
+use PHPUnit\Exception;
 use WordPress\Blueprints\Model\DataClass\RunWordPressInstallerStep;
 use WordPress\Blueprints\Progress\Tracker;
 

@@ -220,7 +220,7 @@ function stream_http_prepare_request_bytes( $url ) {
 	$host    = $parts['host'];
 	$path    = $parts['path'] . ( isset( $parts['query'] ) ? '?' . $parts['query'] : '' );
 	$request = <<<REQUEST
-GET $path HTTP/1.1
+GET $path HTTP/1.0
 Host: $host
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
@@ -229,8 +229,7 @@ Connection: close
 REQUEST;
 
 	// @TODO: Add support for Accept-Encoding: gzip
-
-	return str_replace( "\n", "\r\n", $request ) . "\r\n\r\n";
+	return $request . "\r\n\r\n";
 }
 
 /**
@@ -262,7 +261,6 @@ function streams_http_response_await_headers( $streams ) {
 	foreach ( $headers as $k => $header ) {
 		$headers[ $k ] = parse_http_headers( $header );
 	}
-
 	return $headers;
 }
 
@@ -301,30 +299,44 @@ function streams_send_http_requests( array $requests ) {
 	foreach ( $requests as $k => $request ) {
 		$urls[ $k ] = $request->url;
 	}
-	$redirects        = $urls;
-	$final_streams    = array();
-	$response_headers = array();
+	$redirects         = $urls;
+	$final_streams     = array();
+	$response_statuses = array();
+	$response_headers  = array();
+
+
 	do {
 		$streams = streams_http_open_nonblocking( $redirects );
 		streams_http_requests_send( $streams );
 
 		$redirects = array();
-		$headers   = streams_http_response_await_headers( $streams );
-		foreach ( array_keys( $headers ) as $k ) {
-			$code = $headers[ $k ]['status']['code'];
+		$responses = streams_http_response_await_headers( $streams );
+		foreach ( array_keys( $responses ) as $k ) {
+			$response_statuses[ $k ] = $responses[ $k ]['status'];
+			$code = $response_statuses[ $k ]['code'];
 			if ( $code > 399 || $code < 200 ) {
+				// an optional step's resource should be able to fail the download, but do not
+				// fail the whole process
+
+				// ok for now, would recommend passing code and setting appropriate status RequestInfo::STATE_FAILED
 				throw new Exception( 'Failed to download file ' . $requests[ $k ]->url . ': Server responded with HTTP code ' . $code );
+				// still
 			}
-			if ( isset( $headers[ $k ]['headers']['location'] ) ) {
-				$redirects[ $k ] = $headers[ $k ]['headers']['location'];
+
+			$response_headers[ $k ]  = $responses[ $k ]['headers'];
+			if ( isset( $response_headers[ $k ]['location'] ) ) {
+				$redirects[ $k ] = $response_headers[ $k ]['location'];
 				fclose( $streams[ $k ] );
 				continue;
 			}
 
-			$final_streams[ $k ]    = $streams[ $k ];
-			$response_headers[ $k ] = $headers[ $k ];
+			if ( ! array_key_exists( 'content-length', $response_headers[ $k ] ) ) {
+				$response_headers[ $k ][ 'content-length' ] = 4096;
+			}
+
+			$final_streams[ $k ] = $streams[ $k ];
 		}
 	} while ( count( $redirects ) );
 
-	return array( $final_streams, $response_headers );
+	return array( $final_streams, $response_statuses, $response_headers );
 }

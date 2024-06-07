@@ -17,6 +17,12 @@ on:
         required: false
         type: 'string'
         default: 'phpunit.xml.dist'
+      phpunit-testsuite:
+        description: 'The PHPUnit test suite to use'
+        required: false
+        type: 'string'
+        default: 'default'
+
 env:
   LOCAL_PHP: ${{ inputs.php }}-fpm
   PHPUNIT_CONFIG: ${{ inputs.phpunit-config }}
@@ -36,7 +42,7 @@ jobs:
         with:
           php-version: '${{ inputs.php }}'
           tools: phpunit-polyfills
-          extensions: zip
+          extensions: zip, pdo_sqlite, sqlite3
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
@@ -45,4 +51,4 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: Run PHPUnit tests
-        run: phpunit tests --testdox
+        run: phpunit tests --testsuite ${{inputs.phpunit-testsuite}} --testdox

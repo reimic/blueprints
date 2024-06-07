@@ -68,10 +68,16 @@ Install [composer](https://getcomposer.org/). Once you have it, install the requ
 composer install
 ```
 
-### Run tests with
+## Tests
+### Run unit tests with
 
 ```shell
-vendor/bin/phpunit --testdox
+vendor/bin/phpunit --testsuite unit --testdox
+```
+
+### Run e2e tests with
+```shell
+vendor/bin/phpunit --testsuite e2e --testdox
 ```
 
 ### Run Blueprints in a variety of ways
@@ -82,7 +88,7 @@ vendor/bin/phpunit --testdox
  php examples/blueprint_compiling.php
 ```
 
-#### using a string containg a Blueprint (in JSON):
+#### using a string containing a Blueprint (in JSON):
 
 ```shell
  php examples/json_string_compiling.php

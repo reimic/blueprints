@@ -323,7 +323,7 @@ class Uri {
 
 		// check ipv6
 		if ( $host[0] === '[' ) {
-			if ( $host[-1] !== ']' ) {
+			if ( substr($host, -1) !== ']' ) {
 				return false;
 			}
 
@@ -344,7 +344,7 @@ class Uri {
 			if ( $host === '' || isset( $host[63] ) ) {
 				return false;
 			}
-			if ( $host[0] === '-' || $host[-1] === '-' ) {
+			if ( $host[0] === '-' || substr($host, -1) === '-' ) {
 				return false;
 			}
 			if ( ! preg_match( self::HOST_LABEL_REGEX, $host ) ) {
