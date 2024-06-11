@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
+//use Symfony\Component\Console\Input\StringInput;
+//use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use WordPress\Blueprints\ContainerBuilder;
 use WordPress\Blueprints\Model\BlueprintBuilder;
@@ -17,31 +17,31 @@ if ( getenv( 'USE_PHAR' ) ) {
 
 $blueprint = BlueprintBuilder::create()
 	->withWordPressVersion( 'https://wordpress.org/latest.zip' )
-	->withSiteOptions( [
-		'blogname' => 'My Playground Blog',
-	] )
-	->withWpConfigConstants( [
-		'WP_DEBUG'         => true,
-		'WP_DEBUG_LOG'     => true,
-		'WP_DEBUG_DISPLAY' => true,
-		'WP_CACHE'         => true,
-	] )
-	->withPlugins( [
-		// Required for withContent():
-		'https://downloads.wordpress.org/plugin/wordpress-importer.zip',
-		'https://downloads.wordpress.org/plugin/hello-dolly.zip',
-		'https://downloads.wordpress.org/plugin/gutenberg.17.7.0.zip',
-	] )
-	->withTheme( 'https://downloads.wordpress.org/theme/pendant.zip' )
-//	->withContent( 'https://raw.githubusercontent.com/WordPress/theme-test-data/master/themeunittestdata.wordpress.xml' )
-	->withSiteUrl( 'http://localhost:8081' )
-	->andRunSQL( <<<'SQL'
-CREATE TABLE `tmp_table` ( id INT );
-INSERT INTO `tmp_table` VALUES (1);
-INSERT INTO `tmp_table` VALUES (2);
-SQL
-	)
-	->withFile( 'wordpress.txt', 'Data' )
+//	->withSiteOptions( [
+//		'blogname' => 'My Playground Blog',
+//	] )
+//	->withWpConfigConstants( [
+//		'WP_DEBUG'         => true,
+//		'WP_DEBUG_LOG'     => true,
+//		'WP_DEBUG_DISPLAY' => true,
+//		'WP_CACHE'         => true,
+//	] )
+//	->withPlugins( [
+//		// Required for withContent():
+//		'https://downloads.wordpress.org/plugin/wordpress-importer.zip',
+//		'https://downloads.wordpress.org/plugin/hello-dolly.zip',
+//		'https://downloads.wordpress.org/plugin/gutenberg.17.7.0.zip',
+//	] )
+//	->withTheme( 'https://downloads.wordpress.org/theme/pendant.zip' )
+////	->withContent( 'https://raw.githubusercontent.com/WordPress/theme-test-data/master/themeunittestdata.wordpress.xml' )
+//	->withSiteUrl( 'http://localhost:8081' )
+//	->andRunSQL( <<<'SQL'
+//CREATE TABLE `tmp_table` ( id INT );
+//INSERT INTO `tmp_table` VALUES (1);
+//INSERT INTO `tmp_table` VALUES (2);
+//SQL
+//	)
+//	->withFile( 'wordpress.txt', 'Data' )
 	->toBlueprint();
 
 $subscriber = new class implements EventSubscriberInterface {

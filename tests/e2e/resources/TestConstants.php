@@ -16,12 +16,12 @@ class TestConstants {
 	/**
 	 * @return StepDefinitionInterface[]
 	 */
-	public static function prepare_steps_from_shorthand_word_press_version() {
-		$word_press_zip = ( new UrlResource() )
+	public static function prepare_steps_from_shorthand_wp_version() {
+		$wp_zip = ( new UrlResource() )
 			->setResource( 'url' )
 			->setUrl('https://wordpress.org/latest.zip');
-		$download_word_press_step = ( new DownloadWordPressStep() )
-			->setWordPressZip( $word_press_zip );
+		$download_wp_step = ( new DownloadWordPressStep() )
+			->setWordPressZip( $wp_zip );
 
 		$sqlite_plugin_zip = ( new UrlResource() )
 			->setResource('url' )
@@ -39,14 +39,14 @@ class TestConstants {
 		$options = ( new WordPressInstallationOptions() )
 			->setAdminUsername( 'admin' )
 			->setAdminPassword( 'admin' );
-		$run_word_press_installer_step = ( new RunWordPressInstallerStep() )
+		$run_wp_installer_step = ( new RunWordPressInstallerStep() )
 			->setOptions($options);
 
 		return array(
-			$download_word_press_step,
+			$download_wp_step,
 			$install_sqlite_integration_step,
 			$write_file_step,
-			$run_word_press_installer_step
+			$run_wp_installer_step
 		);
 	}
 }

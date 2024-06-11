@@ -7,6 +7,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use WordPress\Blueprints\Compile\CompiledBlueprint;
 use WordPress\Blueprints\Compile\CompiledStep;
 use WordPress\Blueprints\Compile\StepSuccess;
+use WordPress\Blueprints\Resources\ResourceManager;
 use WordPress\Blueprints\Runtime\RuntimeInterface;
 
 class BlueprintRunner {
@@ -29,6 +30,7 @@ class BlueprintRunner {
 	 */
 	public function run( $blueprint ) {
 		$resourceManagerFactory = $this->resourceManagerFactory;
+		/** @var ResourceManager $resourceManager */
 		$resourceManager        = $resourceManagerFactory();
 		$resourceManager->enqueue(
 			$blueprint->compiledResources

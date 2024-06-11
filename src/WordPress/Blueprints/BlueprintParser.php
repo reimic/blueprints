@@ -33,7 +33,8 @@ class BlueprintParser {
 	 * @return Blueprint
 	 * @throws InvalidArgumentException if unsupported input type or json string can not be decoded
 	 */
-	public function parse( $raw_blueprint ) {
+	public function parse( $raw_blueprint ): Blueprint
+	{
 		if ( $raw_blueprint instanceof stdClass ) {
 			return $this->fromObject( $raw_blueprint );
 		}
@@ -60,7 +61,7 @@ class BlueprintParser {
 	/**
 	 * @param stdClass $data
 	 */
-	public function fromObject( $data ) {
+	public function fromObject( $data ): Blueprint {
 		$result = $this->validator->validate( $data );
 		if ( ! $result->isValid() ) {
 			print_r( ( new ErrorFormatter() )->format( $result->error() ) );
@@ -72,7 +73,7 @@ class BlueprintParser {
 	/**
 	 * @param \WordPress\Blueprints\Model\DataClass\Blueprint $blueprint
 	 */
-	public function fromBlueprint( $blueprint ) {
+	public function fromBlueprint( $blueprint ): Blueprint {
 		$result = $this->validator->validate( $blueprint );
 		if ( ! $result->isValid() ) {
 			print_r( ( new ErrorFormatter() )->format( $result->error() ) );

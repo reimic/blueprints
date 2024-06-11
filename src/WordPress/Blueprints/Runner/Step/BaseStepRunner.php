@@ -6,6 +6,9 @@ use WordPress\Blueprints\Resources\ResourceManager;
 use WordPress\Blueprints\Runtime\RuntimeInterface;
 
 abstract class BaseStepRunner implements StepRunnerInterface {
+	/**
+	 * @var ResourceManager $resourceManager;
+	 */
 	protected $resourceManager;
 
 	protected $runtime;

@@ -314,14 +314,13 @@ function streams_send_http_requests( array $requests ) {
 		foreach ( array_keys( $responses ) as $k ) {
 			$response_statuses[ $k ] = $responses[ $k ]['status'];
 			$code = $response_statuses[ $k ]['code'];
-			if ( $code > 399 || $code < 200 ) {
-				// an optional step's resource should be able to fail the download, but do not
-				// fail the whole process
-
-				// ok for now, would recommend passing code and setting appropriate status RequestInfo::STATE_FAILED
-				throw new Exception( 'Failed to download file ' . $requests[ $k ]->url . ': Server responded with HTTP code ' . $code );
-				// still
-			}
+//			if ( $code > 399 || $code < 200 ) {
+//				// an optional step's resource should be able to fail the download, but do not
+//				// fail the whole process
+//
+//				// ok for now, would recommend passing code and setting appropriate status RequestInfo::STATE_FAILED
+//				throw new Exception( 'Failed to download file ' . $requests[ $k ]->url . ': Server responded with HTTP code ' . $code );
+//			}
 
 			$response_headers[ $k ]  = $responses[ $k ]['headers'];
 			if ( isset( $response_headers[ $k ]['location'] ) ) {

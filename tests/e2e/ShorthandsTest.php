@@ -45,7 +45,7 @@ class ShorthandsTest extends E2ETestCase {
 	}
 
 	/**
-	 * @dataProvider blueprint_with_word_press_version
+	 * @dataProvider blueprint_with_wp_version
 	 * @param string|stdClass|Blueprint $raw_blueprint
 	 */
 	public function testRunningBlueprintWithWordPressVersion(
@@ -66,7 +66,7 @@ class ShorthandsTest extends E2ETestCase {
 		// For PHP <=7.3 the success message is prefixed with: '#!/usr/bin/env php'
 		self::assertStringContainsString( $expected_result, $step_result );
 
-		$expected_steps = TestConstants::prepare_steps_from_shorthand_word_press_version();
+		$expected_steps = TestConstants::prepare_steps_from_shorthand_wp_version();
 
 		foreach ( $results as $key => $result ) {
 			self::assertEquals( $result->step, $expected_steps[$key] );
@@ -78,7 +78,7 @@ class ShorthandsTest extends E2ETestCase {
 	 *
 	 * @return array
 	 */
-	public function blueprint_with_word_press_version() {
+	public static function blueprint_with_wp_version(): array {
 		$json_string = '{"WordPressVersion":"https://wordpress.org/latest.zip"}';
 
 		$json_std_class = json_decode( $json_string );
