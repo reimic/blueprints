@@ -4,10 +4,18 @@
         bootstrap="vendor/autoload.php"
         colors="true"
         beStrictAboutOutputDuringTests="true"
+        defaultTestSuite="all"
+        testdox="true"
 >
     <testsuites>
-        <testsuite name="default">
+        <testsuite name="all">
             <directory>tests</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="e2e">
+            <directory>tests/e2e</directory>
         </testsuite>
     </testsuites>
 </phpunit>

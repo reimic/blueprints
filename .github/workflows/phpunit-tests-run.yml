@@ -3,29 +3,37 @@ name: Run PHPUnit tests
 on:
   workflow_call:
     inputs:
-      os:
-        description: 'Operating system to run tests on'
+      OS:
+        description: 'The operating system to run tests on'
         required: false
         type: 'string'
-        default: 'ubuntu-latest'
-      php:
+        default: ubuntu-latest
+      PHP:
         description: 'The version of PHP to use, in the format of X.Y'
-        required: true
-        type: 'string'
-      phpunit-config:
-        description: 'The PHPUnit configuration file to use'
         required: false
         type: 'string'
-        default: 'phpunit.xml.dist'
+        default: '7.2'
+      TEST_SUITE:
+        description: 'The PHPUnit test suite to use'
+        required: false
+        type: 'string'
+        default: unit
+      FAIL_FAST:
+        description: 'If test job should fail at first defect'
+        required: false
+        type: boolean
+        default: true
+
 env:
-  LOCAL_PHP: ${{ inputs.php }}-fpm
-  PHPUNIT_CONFIG: ${{ inputs.phpunit-config }}
+  LOCAL_PHP: ${{ inputs.PHP }}-fpm
+  PHPUNIT_CONFIG: phpunit.xml.dist
+  STRICT_FLAGS: ${{ ( inputs.FAIL_FAST && '--stop-on-defect --fail-on-warning --fail-on-risky' ) || '' }}
 
 jobs:
   phpunit-tests:
-    name: ${{ inputs.os }}
-    runs-on: ${{ inputs.os }}
-    timeout-minutes: 20
+    name: ${{ inputs.OS }} ${{ inputs.TEST_SUITE }} tests
+    runs-on: ${{ inputs.OS }}
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repository
@@ -34,9 +42,9 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '${{ inputs.php }}'
+          php-version: '${{ inputs.PHP }}'
           tools: phpunit-polyfills
-          extensions: zip
+          extensions: zip, pdo_sqlite, sqlite3
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
@@ -44,5 +52,11 @@ jobs:
           ignore-cache: "yes"
           composer-options: "--optimize-autoloader"
 
-      - name: Run PHPUnit tests
-        run: phpunit tests --testdox
+      - name: Run PHPUnit unit tests
+        id: unit
+        if: contains( fromJSON( '["unit", "all"]' ), inputs.TEST_SUITE )
+        run: phpunit --testsuite unit ${{ env.STRICT_FLAGS }}
+
+      - name: Run PHPUnit e2e tests
+        if: inputs.TEST_SUITE == 'e2e' || ( inputs.TEST_SUITE == 'all' && ( ! inputs.FAIL_FAST || steps.unit.outcome == 'success' ) )
+        run: phpunit --testsuite e2e ${{ env.STRICT_FLAGS }}

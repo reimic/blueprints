@@ -1,10 +1,6 @@
-name: PHPUnit Tests
+name: Automatic Tests Dispatch
 
-on:
-  push:
-    branches:
-      - trunk
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   test:
@@ -20,6 +16,7 @@ jobs:
         php: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
 
     with:
-      os: ${{ matrix.os }}
-      php: ${{ matrix.php }}
-      phpunit-config: ${{ 'phpunit.xml.dist' }}
+      OS: ${{ matrix.os }}
+      PHP: ${{ matrix.php }}
+      TEST_SUITE: all
+      FAIL_FAST: true
